@@ -14,9 +14,9 @@ PID::PID() {}
 PID::~PID() {}
 
 void PID::Init(double Kp, double Ki, double Kd) {
-	PID::Kp = Kp;
-	PID::Ki = Ki;
-	PID::Kd = Kd;
+	this->Kp = Kp;
+	this->Ki = Ki;
+	this->Kd = Kd;
 	p_err = 0.0;
 	d_err = 0.0;
 	i_err = 0.0;
@@ -28,7 +28,13 @@ void PID::Init(double Kp, double Ki, double Kd) {
 	steps_eval = 2000;
 	total_error = 0;
 	best_error = std::numeric_limits<double>::max();
-	twiddle = true;
+	twiddle = false;
+	if (twiddle == false) {
+		cout << "not using twiddle" << endl;
+	}
+	else if (twiddle == true) {
+		cout << "twiddle used for parameter tuning" << endl;
+	}
 	dp_index = 2;
 	tune_down = false;
 	tune_up = false;
@@ -36,28 +42,15 @@ void PID::Init(double Kp, double Ki, double Kd) {
 }
 
 void PID::UpdateError(double cte) {
-	
-	if (step == 1){
-		prev_cte = cte;
-	}
-	
+
+	d_err = cte - p_err;
 	p_err = cte;
-	d_err = cte - prev_cte;
-	prev_cte = cte;
 	i_err += cte;
 
-	// twiddle here
-	/*
-	
-	if (step < steps_eval) {
-		total_error += pow(cte, 2);
-		cout << "total_error: " << total_error << endl;
-	}
-	*/
-
-	//if (twiddle && step % (steps_end + steps_eval) == 0) {
+	// Implementation of twiddle
+	// not working quite well...?
 	if (twiddle && step <= (steps_end + steps_eval)) {
-		total_error = pow(cte, 2);
+		total_error += pow(cte, 2);
 		cout << "twiddle - step: " << step << "   P: " << Kp << " I: " << Ki << " D: " << Kd << endl;
 		if (total_error < best_error) {
 			best_error = total_error;
@@ -84,7 +77,7 @@ void PID::UpdateError(double cte) {
 			dp_index = (dp_index + 1) % 3;
 			tune_up = tune_down = false;
 		}
-		//total_error = 0;
+		total_error = 0;
 	}
 	step++;
 
