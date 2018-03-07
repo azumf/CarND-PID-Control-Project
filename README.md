@@ -80,6 +80,8 @@ I recorded two videos that show the PID-controller in action. One is with the in
 
 To be fair: The parameters for the second video (with more sophisticated throttle value could be further optimized to mitigate the under-damped oscillation.
 
+**Please mute the sound, otherwise you will hear noise from TV ;-)**
+
 #### With project throttle parameter of 0.3 - 0.4
 [https://youtu.be/-IV9dNSFzaY](https://youtu.be/-IV9dNSFzaY "Video 1")
 
