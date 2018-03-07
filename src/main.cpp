@@ -37,13 +37,17 @@ int main()
 
   PID pid;
   PID pid_throttle;
-
+/*
   double Kp_init = 0.07;
   double Ki_init = 0.001;
   double Kd_init = 3.0;
+*/
+  double Kp_init = 0.13;
+  double Ki_init = 0.0003;
+  double Kd_init = 5;
   pid.Init(Kp_init, Ki_init, Kd_init);
   bool use_throttle_pid = true;
-  // 
+ 
   if (use_throttle_pid == false) {
 	  std::cout << "PID controller for throttle not activated" << std::endl;
   }
@@ -71,7 +75,7 @@ int main()
 		  double steer_value;
 		  double throttle_value;
 		  int current_step;
-		  double inner_vin_diesel = 0.85;
+		  double inner_vin_diesel = 0.7;
 
 		  pid.UpdateError(cte);
 		  steer_value = pid.TotalError();
@@ -87,7 +91,7 @@ int main()
 			  msgJson["throttle"] = throttle_value;
 		  }
 		  else {
-			  msgJson["throttle"] = 0.5;
+			  msgJson["throttle"] = 0.38;
 		  }
           auto msg = "42[\"steer\"," + msgJson.dump() + "]";
           //std::cout << msg << std::endl;
